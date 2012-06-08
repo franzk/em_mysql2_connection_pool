@@ -16,7 +16,7 @@ class EmMysql2ConnectionPool
       @busy = true
       @query_text = sql(connection)
       q = connection.query @query_text, @opts
-      q.callback{ |result| succeed result, @with_info.map{|i| connection.send(i)}, &block }
+      q.callback{ |result| succeed result, Hash[@with_info.map{|i| [i, connection.send(i)]}], &block }
       q.errback{  |error|  fail error, &block }
       return q
     rescue StandardError => error
